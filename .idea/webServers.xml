@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="0dec35ef-ffe4-4b7f-acf4-334aa77584f9" name="manage" url="http://182.254.243.44">
+        <fileTransfer host="182.254.243.44" port="22" privateKey="$USER_HOME$/.ssh/id_rsa" rootFolder="/pythonweb" accessType="SFTP" keyPair="true">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" />
+          </advancedOptions>
+          <option name="port" value="22" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>学员信息</title>
+    <link href="/static/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <script src="/static/jquery.min.js"></script>
+    <script src="/static/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/static/d3/d3.min.js" charset="utf-8"></script>
+	<style>
+        html,body{
+            height: 100%;
+        }
+        .chart{
+            height:100%;
+            width:100%;
+        }
+		.chart text{
+			fill : white;
+            font:10px sans-serif;
+            text-anchor: end;
+            text-anchor: end;
+		}
+        .bar{
+            fill: steelblue;
+        }
+        .bar:hover{
+            fill:red;
+        }
+	</style>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 col-lg-12">
+            <h3 class="text-center">培训人员个人信息</h3>
+        </div>
+    </div>
+    <br>
+    <div class="col-md-2 col-lg-2 col-md-offset-1 col-lg-offset-1">
+        <img src="/static/avatar/timg.jpg" class="img-thumbnail" >
+    </div>
+    <br>
+    <div class="col-md-8 col-lg-8 ">
+         <table class="table">
+          <tbody>
+            <tr>
+                <td><strong>培训编号：</strong></td>
+                <td>{{person.number}}</td>
+                <td><strong>姓名：</strong></td>
+                <td>{{person.name}}</td>
+                <td><strong>性别：</strong></td>
+                <td>{{person.gender}}</td>
+            </tr>
+            <tr>
+                <td><strong>年龄：</strong></td>
+                <td>{{person.age}}</td>
+                <td><strong>电话：</strong></td>
+                <td>{{person.phone}}</td>
+            </tr>
+            <tr>
+                <td><strong>邮箱：</strong></td>
+                <td>{{person.email}}</td>
+                <td><strong>住址：</strong></td>
+                <td>{{person.address}}</td>
+            </tr>
+          </tbody>
+        </table>
+    </div>
+    <div class="row">
+            <div class="col-xs-12 col-md-10 col-lg-10 col-md-offset-1 col-lg-offset-1">
+                 <svg class="chart"></svg>
+            </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-xs-6 col-md-4 col-lg-4 col-md-offset-4 col-ls-offset-4">
+            <button type="button" class="btn btn-info pull-left">编辑信息</button>
+            <button type="button" class="btn btn-danger pull-right">删除信息</button>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function(){
+        var width = $(".chart").width();
+        var height = width/2;
+        $(".chart").height(height);
+        DrawChart();
+    })
+    function DrawChart(){
+        var lessons = {{ grade|safe }}
+//        console.log(list);
+        for(lesson in lessons){
+            lesson.value = parseFloat(lesson.value);
+        }
+
+//        var mdata = [{name:"Lesson1",value:90.78},
+//            {name:"Lesson2",value:83.67},
+//            {name:"Lesson3",value:67.45},
+//        ];
+        mdata = lessons;
+
+        margin = {top:30,right:30,bottom:30,left:30}
+        var chart_height = $(".chart").height() - margin.top - margin.bottom;
+        var chart_width = $(".chart").width() - margin.left - margin.right;
+
+        var x = d3.scaleBand()
+            .domain(mdata.map(function (d) {
+                return d.name
+            }))
+            .rangeRound([0,chart_width])
+            .padding(0.4);
+
+        var y = d3.scaleLinear()
+            .domain([0,100])
+            .range([chart_height,0])
+
+        var chart = d3.select(".chart")
+            .attr("width",chart_width + margin.left + margin.right)
+            .attr("height",chart_height+margin.top+margin.bottom)
+            .append("g")
+            .attr("transform","translate("+margin.left+","+margin.top+")");
+
+        var barWidth = chart_width/mdata.length;
+
+        var xAxis = d3.axisBottom()
+            .scale(x);
+
+        chart.append("g")
+            .attr("class","x axis--x")
+            .attr("transform","translate(0,"+chart_height+")")
+            .call(xAxis)
+            .selectAll("text")
+            .style("text-anchor","middle")
+            .style("fill","black")
+            .style("font-size","1.5em");
+
+        var bar = chart.selectAll(".bar")
+            .data(mdata)
+            .enter()
+            .append("g")
+            .attr("transform",function (d,i) {
+                return "translate("+x(d.name)+",0)";
+            })
+        bar.append("rect")
+            .attr("y",function (d) {
+                return y(d.value)
+            })
+            .attr("height",function (d) {
+                return chart_height - y(d.value);
+            })
+            .attr("width",x.bandwidth())
+            .attr("class","bar")
+
+        bar.append(("text"))
+            .attr("x",barWidth*0.6/2+15)
+            .attr("y",function (d) {
+                return y(d.value)+3;
+            })
+            .attr("dy","1.3em")
+            .style("font-size","1.3em")
+            .text(function (d) {
+                return d.value;
+            })
+
+    }
+
+</script>
+
+</body>
+</html>

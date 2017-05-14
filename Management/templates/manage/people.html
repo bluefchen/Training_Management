@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>培训列表</title>
+    <link href="/static/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <script src="/static/jquery.min.js"></script>
+    <script src="/static/bootstrap/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-lg-12">
+                <h3 class="text-center">培训人员列表</h3>
+            </div>
+        </div>
+        <table class="table table-hover col-sm-6 col-md-6 col-lg-6">
+        <thead>
+            <tr>
+                <th>编号</th>
+                <th>姓名</th>
+                <th>总评</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for person in people %}
+            {% if  person.person_grade.average < 70 %}
+                <tr class="danger jump">
+                    <td>{{person.number}}</td>
+                    <td>{{person.name}}</td>
+                    <td>{{person.person_grade.average}}</td>
+                </tr>
+            {% elif person.person_grade.average > 70 and person.person_grade.average < 85 %}
+                <tr class="active jump">
+                    <td>{{person.number}}</td>
+                    <td>{{person.name}}</td>
+                    <td>{{person.person_grade.average}}</td>
+                </tr>
+            {% elif person.person_grade.average > 85 %}
+                <tr class="success jump">
+                    <td>{{person.number}}</td>
+                    <td>{{person.name}}</td>
+                    <td>{{person.person_grade.average}}</td>
+                </tr>
+            {% endif %}
+        {% endfor %}
+        </tbody>
+    </table>
+    </div>
+    <script type="text/javascript">
+        $(function(){
+            $(".jump").click(function () {
+                var id = $(this).children("td").first().text();
+                window.location.href = "/manage/person/"+id;
+            })
+        })
+    </script>
+</body>
+</html>
