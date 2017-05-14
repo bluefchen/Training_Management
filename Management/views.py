@@ -25,6 +25,14 @@ def person(request, id):
     lessons = [{'name':'lesson1', 'value':str(lesson1)}, {'name':'lesson2', 'value':str(lesson2)}, {'name':'lesson3', 'value':str(lesson3)}]
     return render(request, 'manage/person.html', {'person': person, 'grade': json.dumps(lessons)})
 
+#  新建或者修改一个培训人员的具体信息
+def person(request, id):
+    if str(id) == '0':
+        person = Person(number="",name="",)
+    else:
+        person = Person.objects.get(number=id)
+    return render(request, 'manage/person_edit.html', {'person': person})
+
 
 # 培训系统上传学员培训数据
 def setLessonOneGrade(request):
