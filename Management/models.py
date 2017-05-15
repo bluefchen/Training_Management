@@ -2,6 +2,8 @@
 from __future__ import unicode_literals
 
 from django.db import models
+from django.conf import settings
+from django.core.files.storage import FileSystemStorage
 from django.utils import timezone
 # Create your models here.
 
@@ -16,7 +18,7 @@ class Person(models.Model):
     phone = models.CharField(max_length=15, default='18510309110')
     email = models.CharField(max_length=32, default='bigplane@qq.com')
     address = models.CharField(max_length=128, default='上海市嘉定区曹安公路4800号')
-    image = models.ImageField(upload_to='avatar', blank=True, null=True)
+    image = models.ImageField(upload_to='avatar', default='avatar/timg.jpg')
     def __unicode__(self):
         return self.name
 # trainee grade info

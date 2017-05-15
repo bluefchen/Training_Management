@@ -45,9 +45,11 @@ def update_person(request):
     print 'number is '+number
     if str(number) == '0':
         year = time.strftime("%y", time.localtime(time.time()))
-        number = int(year)*10000 + len(Person.objects.all()) + 1
-        person.number = number
-        grade = person.person_grade;
+        number = int(year)*100000 + len(Person.objects.all()) + 1
+        person.number = str(number)
+        person.save();
+        grade = Grade();
+        grade.person = person;
         grade.lesson1 = 60.00;
         grade.lesson2 = 60.00;
         grade.lesson3 = 60.00;
@@ -64,17 +66,18 @@ def update_person(request):
     person.email = receive_data['email']
     person.address = receive_data['address']
     if 'avatar' in request.FILES:
-         path = settings.MEDIA_ROOT
-         file_name = 'avatar/'+number+".jpg"
-         file = os.path.join(path, file_name)
-         print file
-         if os.path.exists(file):
-             os.remove(file)
          avatar = request.FILES['avatar']
-         avatar.name = number+".jpg"
-         person.image = avatar
+         if avatar != None:
+             path = settings.MEDIA_ROOT
+             file_name = 'avatar/'+str(number)+".jpg"
+             file = os.path.join(path, file_name)
+             print file
+             if os.path.exists(file):
+                 os.remove(file)
+             avatar.name = str(number)+".jpg"
+             person.image = avatar
     person.save();
-    return HttpResponseRedirect('/manage/person/'+number);
+    return HttpResponseRedirect('/manage/person/'+str(number));
 
 # 培训系统上传学员培训数据
 def setLessonOneGrade(request):
