@@ -8,32 +8,12 @@
     <script src="/static/bootstrap/js/bootstrap.min.js"></script>
     <script src="/static/d3/d3.min.js" charset="utf-8"></script>
     <style type="text/css">
-        text {
-          font: 10px sans-serif;
-        }
-
-        .axis path,
-        .axis line {
-          fill: none;
-          stroke: #000;
-          shape-rendering: crispEdges;
-        }
-
-        .line {
-          fill: none;
-          stroke-width: 1.5px;
-        }
+        /*.label-key {*/
+          /*font-weight: bold;*/
+        /*}*/
 
         .label {
           text-anchor: middle;
-        }
-
-        .label rect {
-          fill: white;
-        }
-
-        .label-key {
-          font-weight: bold;
         }
     </style>
 </head>
@@ -53,16 +33,6 @@
     </div>
     <script type="text/javascript">
 
-//        var mdata = [{level1:"90",level2:"90",level3:"85",level4:"80",level5:"70", date:"day1"},
-//            {level1:"80",level2:"70",level3:"75",level4:"90",level5:"57", date:"day2"},
-//            {level1:"70",level2:"60",level3:"65",level4:"80",level5:"67", date:"day3"},
-//            {level1:"60",level2:"80",level3:"95",level4:"70",level5:"77", date:"day4"},
-//            {level1:"68",level2:"90",level3:"55",level4:"60",level5:"87", date:"day5"},
-//        ];
-//        var mdata = [{name:"Lesson1",value:90.78},
-//            {name:"Lesson2",value:83.67},
-//            {name:"Lesson3",value:67.45},
-//        ];
         var mdata = [{key:"level1",value:[{date:"day1",key:"level1",value:"90"},{date:"day2",key:"level1",value:"80"},{date:"day3",key:"level1",value:"70"}]}
         ,{key:"level2",value:[{date:"day1",key:"level2",value:"70"},{date:"day2",key:"level2",value:"80"},{date:"day3",key:"level2",value:"90"}]}
         ,{key:"level3",value:[{date:"day1",key:"level3",value:"60"},{date:"day2",key:"level3",value:"60"},{date:"day3",key:"level3",value:"60"}]}]
@@ -87,6 +57,18 @@
             .domain([0,100])
             .range([chart_height,0]);
 
+        var s = new Array();
+            for(var i=0 ;i< mdata.length;i++){
+                s.push(i);
+            }
+        var legend = chart_width/s.length;
+        var z = d3.scaleOrdinal()
+            .domain(mdata.map(function (d) {
+                return d.key
+            }))
+            .range(s)
+        var colors = ["green","red","orange","black","blue","purple","pink","yellow"]
+
         var lineFunction = d3.line()
                          .x(function(d){return x(d.date);})
                          .y(function(d){return y(d.value);});
@@ -95,6 +77,9 @@
             .attr("class","x axis--x")
             .attr("transform","translate(0,"+chart_height+")")
             .call(d3.axisBottom(x));
+        diagram.append("g")
+            .attr("class","y axis--y")
+            .call(d3.axisLeft(y));
 
         var serie = diagram.selectAll(".serie")
             .data(mdata)
@@ -102,36 +87,56 @@
             .append("g")
             .attr("class","serie")
             .attr("transform","translate("+barWidth/2+",0)")
-//            .text(function(d){
-//                console.log(d);
-//                return d;
-//            })
 
         serie.append("path")
             .attr("class","line")
-            .attr("stroke","green")
+            .attr("stroke",function (d,i) {
+                return colors[i];
+            })
             .attr("stroke-width","2")
             .attr("d",function (d) {
                 return lineFunction(d.value);
             })
 
-        var label = serie.selectAll(".label")
+        var circle = serie.selectAll("circle")
             .data(function(d){
                 return d.value;
             })
             .enter()
-            .append("g")
-            .attr("class","label")
+            .append("circle")
+            .attr("r",".5em")
+            .attr("fill",function (d) {
+                var n = z(d.key);
+                return colors[n];
+            })
             .attr("transform",function(d){
                 return "translate("+x(d.date)+","+y(d.value)+")";
             })
 
-        label.append("text")
-            .attr("dy",".35em")
-            .filter(function(d, i) { return i === mdata.length - 1; })
-            .append("tspan")
-            .attr("class", "label-key")
-            .text(function(d) { return "HH"; });
+         var icon = diagram.selectAll(".label")
+            .data(mdata)
+            .enter()
+            .append("g")
+             .attr("class", "label")
+            .attr("transform",function(d,i){
+                return "translate("+(legend*i+barWidth/2)+","+(-margin.top/2)+")";
+            });
+
+         var rect = icon.append("rect")
+             .attr("dx","-3em")
+            .attr("width",".5em")
+            .attr("height",".5em")
+            .attr("fill",function (d,i) {
+                return colors[i];
+            })
+
+         var text = icon.append("text")
+             .attr("dx","3em")
+            .attr("fill", "black")
+            .attr("dy",".5em")
+            .text(function (d) {
+                return d.key;
+            })
     </script>
 </body>
 </html>

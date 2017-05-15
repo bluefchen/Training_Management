@@ -21,6 +21,9 @@
             text-anchor: end;
             text-anchor: end;
 		}
+        .label {
+          text-anchor: middle;
+        }
         .bar{
             fill: steelblue;
         }
@@ -73,6 +76,13 @@
             </div>
     </div>
     <br>
+    <br>
+    <div class="row">
+        <div id = "diagram" class="col-xs-12 col-md-10 col-lg-10 col-md-offset-1 col-lg-offset-1">
+
+        </div>
+    </div>
+    <br>
     <div class="row">
         <div class="col-xs-6 col-md-4 col-lg-4 col-md-offset-4 col-ls-offset-4">
             <button id="edit" type="button" class="btn btn-info pull-left">编辑信息</button>
@@ -87,6 +97,7 @@
         var height = width/2;
         $(".chart").height(height);
         DrawChart();
+
         $("#edit").click(function () {
             number = $("#number").text();
             window.location.href = "/manage/person/edit/"+number;
@@ -95,6 +106,9 @@
             number = $("#number").text();
             window.location.href = "/manage/person/delete/"+number;
         })
+        $(".bar").click(function () {
+            LessonAnalysis();
+        });
     })
     function DrawChart(){
         var lessons = {{ grade|safe }}
@@ -172,6 +186,115 @@
                 return d.value;
             })
 
+    }
+
+    function LessonAnalysis(){
+        var mdata = [{key:"level1",value:[{date:"day1",key:"level1",value:"90"},{date:"day2",key:"level1",value:"80"},{date:"day3",key:"level1",value:"70"}]}
+        ,{key:"level2",value:[{date:"day1",key:"level2",value:"70"},{date:"day2",key:"level2",value:"80"},{date:"day3",key:"level2",value:"90"}]}
+        ,{key:"level3",value:[{date:"day1",key:"level3",value:"60"},{date:"day2",key:"level3",value:"60"},{date:"day3",key:"level3",value:"60"}]}]
+        var margin = {top:30,right:30,bottom:30,left:30};
+        var chart_width = $("#diagram").width() - margin.left - margin.right;
+        var chart_height = chart_width/2 - margin.top - margin.bottom;
+        var barWidth = chart_width/mdata.length;
+        if ($("#analysis").length > 0){
+            $("#analysis").remove();
+        }
+        var svg = d3.select("#diagram").append("svg").attr("id","analysis");
+        var diagram = svg.attr("width",chart_width + margin.left + margin.right)
+            .attr("height", chart_height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform","translate("+margin.left+","+margin.top+")")
+
+        var x = d3.scaleBand()
+            .domain(mdata[0].value.map(function (d) {
+                return d.date
+            }))
+            .range([0,chart_width]);
+
+        var y = d3.scaleLinear()
+            .domain([0,100])
+            .range([chart_height,0]);
+
+        var s = new Array();
+            for(var i=0 ;i< mdata.length;i++){
+                s.push(i);
+            }
+        var legend = chart_width/s.length;
+        var z = d3.scaleOrdinal()
+            .domain(mdata.map(function (d) {
+                return d.key
+            }))
+            .range(s)
+        var colors = ["green","red","orange","black","blue","purple","pink","yellow"]
+
+        var lineFunction = d3.line()
+                         .x(function(d){return x(d.date);})
+                         .y(function(d){return y(d.value);});
+
+        diagram.append("g")
+            .attr("class","x axis--x")
+            .attr("transform","translate(0,"+chart_height+")")
+            .call(d3.axisBottom(x));
+        diagram.append("g")
+            .attr("class","y axis--y")
+            .call(d3.axisLeft(y));
+
+        var serie = diagram.selectAll(".serie")
+            .data(mdata)
+            .enter()
+            .append("g")
+            .attr("class","serie")
+            .attr("transform","translate("+barWidth/2+",0)")
+
+        serie.append("path")
+            .attr("class","line")
+            .attr("stroke",function (d,i) {
+                return colors[i];
+            })
+            .attr("stroke-width","2")
+            .attr("d",function (d) {
+                return lineFunction(d.value);
+            })
+
+        var circle = serie.selectAll("circle")
+            .data(function(d){
+                return d.value;
+            })
+            .enter()
+            .append("circle")
+            .attr("r",".5em")
+            .attr("fill",function (d) {
+                var n = z(d.key);
+                return colors[n];
+            })
+            .attr("transform",function(d){
+                return "translate("+x(d.date)+","+y(d.value)+")";
+            })
+
+         var icon = diagram.selectAll(".label")
+            .data(mdata)
+            .enter()
+            .append("g")
+             .attr("class", "label")
+            .attr("transform",function(d,i){
+                return "translate("+(legend*i+barWidth/2)+","+(-margin.top/2)+")";
+            });
+
+         var rect = icon.append("rect")
+             .attr("dx","-3em")
+            .attr("width",".5em")
+            .attr("height",".5em")
+            .attr("fill",function (d,i) {
+                return colors[i];
+            })
+
+         var text = icon.append("text")
+             .attr("dx","3em")
+            .attr("fill", "black")
+            .attr("dy",".5em")
+            .text(function (d) {
+                return d.key;
+            })
     }
 
 </script>

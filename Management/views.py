@@ -86,12 +86,17 @@ def update_person(request):
     return HttpResponseRedirect('/manage/person/'+str(number));
 
 # 具体课程成绩分析
+# 反馈的数据格式
+# var mdata = [{key:"level1",value:[{date:"day1",key:"level1",value:"90"},{date:"day2",key:"level1",value:"80"},{date:"day3",key:"level1",value:"70"}]}
+#         ,{key:"level2",value:[{date:"day1",key:"level2",value:"70"},{date:"day2",key:"level2",value:"80"},{date:"day3",key:"level2",value:"90"}]}
+#         ,{key:"level3",value:[{date:"day1",key:"level3",value:"60"},{date:"day2",key:"level3",value:"60"},{date:"day3",key:"level3",value:"60"}]}]
 def lesson_analysis(request, id):
     lesson1s = LessonOne.objects.filter(number=id).order_by('-train_time')[0:5]
     # if len(lesson1s) > 5:
     #     lesson1s = lesson1s[0:5]
     print 'coount is ' + str(len(lesson1s))
-    return render(request, 'manage/lesson_analysis.html', {'lesson': lesson1s})
+    # lessons = [{'name':'lesson1', 'value':str(lesson1)}, {'name':'lesson2', 'value':str(lesson2)}, {'name':'lesson3', 'value':str(lesson3)}]
+    return render(request, "manage/lesson_analysis.html")
 # 培训系统上传学员培训数据
 def setLessonOneGrade(request):
     if request.POST:
