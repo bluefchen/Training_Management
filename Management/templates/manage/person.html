@@ -38,7 +38,7 @@
     </div>
     <br>
     <div class="col-md-2 col-lg-2 col-md-offset-1 col-lg-offset-1">
-        <img src="/static/avatar/timg.jpg" class="img-thumbnail" >
+        <img src={{person.image.url}} class="img-thumbnail" >
     </div>
     <br>
     <div class="col-md-8 col-lg-8 ">
@@ -46,7 +46,7 @@
           <tbody>
             <tr>
                 <td><strong>培训编号：</strong></td>
-                <td>{{person.number}}</td>
+                <td id="number">{{person.number}}</td>
                 <td><strong>姓名：</strong></td>
                 <td>{{person.name}}</td>
                 <td><strong>性别：</strong></td>
@@ -75,8 +75,8 @@
     <br>
     <div class="row">
         <div class="col-xs-6 col-md-4 col-lg-4 col-md-offset-4 col-ls-offset-4">
-            <button type="button" class="btn btn-info pull-left">编辑信息</button>
-            <button type="button" class="btn btn-danger pull-right">删除信息</button>
+            <button id="edit" type="button" class="btn btn-info pull-left">编辑信息</button>
+            <button id="delete" type="button" class="btn btn-danger pull-right">删除信息</button>
         </div>
     </div>
 </div>
@@ -87,6 +87,10 @@
         var height = width/2;
         $(".chart").height(height);
         DrawChart();
+        $("#edit").click(function () {
+            number = $("#number").text();
+            window.location.href = "/manage/person/edit/"+number;
+        })
     })
     function DrawChart(){
         var lessons = {{ grade|safe }}

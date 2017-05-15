@@ -7,13 +7,16 @@ from django.utils import timezone
 
 # people's personal info
 class Person(models.Model):
-    number = models.CharField(max_length=32, default='1700001')
+    number = models.CharField(max_length=32, default='1700001', primary_key=True)
+    idcard = models.CharField(max_length=32, default='13027472347324')
+    province = models.CharField(max_length=32, default='Shanghai')
     name = models.CharField(max_length=32, default='LiHua')
     gender = models.CharField(max_length=1, default='F')
-    age = models.DecimalField(max_digits=3, decimal_places=0, default=25)
-    phone = models.DecimalField(max_digits=15, decimal_places=0, null=True)
-    email = models.EmailField(null=True)
+    age = models.CharField(max_length=3, default='25')
+    phone = models.CharField(max_length=15, default='18510309110')
+    email = models.CharField(max_length=32, default='bigplane@qq.com')
     address = models.CharField(max_length=128, default='上海市嘉定区曹安公路4800号')
+    image = models.ImageField(upload_to='avatar', blank=True, null=True)
     def __unicode__(self):
         return self.name
 # trainee grade info
@@ -33,3 +36,7 @@ class LessonOne(models.Model):
     level5 = models.DecimalField(max_digits=5, decimal_places=2, default=60.00)
     average = models.DecimalField(max_digits=5, decimal_places=2, default=60.00)
     train_time = models.DateTimeField(auto_now=True)
+
+class Avatar(models.Model):
+    number = models.CharField(max_length=32, default='1700001', primary_key=True)
+    image = models.ImageField(upload_to='avatar', blank=True, null=True)

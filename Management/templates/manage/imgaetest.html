@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>编辑培训人员信息</title>
+    <link href="/static/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <link href="/static/fileinput/css/fileinput.css" rel="stylesheet">
+    <script src="/static/jquery.min.js"></script>
+    <script src="/static/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/static/fileinput/js/fileinput.min.js" charset="utf-8"></script>
+    <script src="/static/fileinput/js/locales/zh.js" charset="utf-8"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-lg-12">
+                <h3 class="text-center">编辑培训人员个人信息</h3>
+            </div>
+        </div>
+        <br>
+        <form id="form" enctype="multipart/form-data" action="/manage/person/update" method="post">
+            <div class="row">
+                <div class="form-group col-xs-4 col-md-4 col-lg-4">
+                        <br>
+                        <input name="avatar" id="image" type="file" multiple>
+                </div>
+             </div>
+            <div class="row">
+                <div class="col-xs-8 col-md-8 col-lg-8 col-md-offset-2 col-lg-offset-2">
+                    <div class="form-group">
+                        <label>number</label>
+                        <input name="number" type="text" class="form-control" placeholder="请输入您的编号" value={{person.number}}>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <br>
+        <div class="row">
+            <div class="col-xs-4 col-md-4 col-lg-4 col-md-offset-4 col-lg-offset-4">
+                <button id="submit" type="button" class="btn btn-success center-block">保存信息</button>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+            $("#image").fileinput({
+                showUpload: false,
+                showCaption: false,
+                showRemove:false,
+                showClose:false,
+                browseClass: "btn btn-default",
+                fileType: "any",
+                previewFileIcon: "<i class='glyphicon glyphicon-king'></i>",
+                overwriteInitial: true,
+                initialPreviewAsData: true,
+                maxFileCount:1,
+                language:"zh",
+                preivewClass:"file-preview-image",
+                initialPreview: [
+                    "/static/avatar/timg.jpg",
+                ],
+                initialPreviewConfig: [
+                    {caption: "avatar.jpg", width: "120px", url: "{$url}", key: 1},
+                ]
+            });
+
+            $(function(){
+                $("#submit").click(function () {
+                    $("#form").submit();
+                })
+            })
+    </script>
+</body>
+</html>
