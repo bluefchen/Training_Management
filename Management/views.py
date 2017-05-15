@@ -91,12 +91,13 @@ def update_person(request):
 #         ,{key:"level2",value:[{date:"day1",key:"level2",value:"70"},{date:"day2",key:"level2",value:"80"},{date:"day3",key:"level2",value:"90"}]}
 #         ,{key:"level3",value:[{date:"day1",key:"level3",value:"60"},{date:"day2",key:"level3",value:"60"},{date:"day3",key:"level3",value:"60"}]}]
 def lesson_analysis(request, id):
-    lesson1s = LessonOne.objects.filter(number=id).order_by('-train_time')[0:5]
-    # if len(lesson1s) > 5:
-    #     lesson1s = lesson1s[0:5]
-    print 'coount is ' + str(len(lesson1s))
-    # lessons = [{'name':'lesson1', 'value':str(lesson1)}, {'name':'lesson2', 'value':str(lesson2)}, {'name':'lesson3', 'value':str(lesson3)}]
-    return render(request, "manage/lesson_analysis.html")
+    lessons = LessonOne.objects.filter(number=id).order_by('train_time')[0:5]
+    list_lesson = [];
+    for lesson in lessons:
+        json_lesson = {'level1':str(lesson.level1),'level2':str(lesson.level2),'level3':str(lesson.level3),'level4':str(lesson.level4)
+                           ,'level5':str(lesson.level5),'average':str(lesson.average),'date':lesson.train_time.strftime("%Y.%m.%d %H:%M")}
+        list_lesson.append(json_lesson)
+    return HttpResponse(json.dumps(list_lesson),content_type="application/json");
 # 培训系统上传学员培训数据
 def setLessonOneGrade(request):
     if request.POST:

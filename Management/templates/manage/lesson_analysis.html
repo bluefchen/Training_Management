@@ -11,7 +11,10 @@
         /*.label-key {*/
           /*font-weight: bold;*/
         /*}*/
-
+        .line {
+          fill: none;
+          stroke-width: 2px;
+        }
         .label {
           text-anchor: middle;
         }
@@ -32,10 +35,56 @@
         </div>
     </div>
     <script type="text/javascript">
-
-        var mdata = [{key:"level1",value:[{date:"day1",key:"level1",value:"90"},{date:"day2",key:"level1",value:"80"},{date:"day3",key:"level1",value:"70"}]}
-        ,{key:"level2",value:[{date:"day1",key:"level2",value:"70"},{date:"day2",key:"level2",value:"80"},{date:"day3",key:"level2",value:"90"}]}
-        ,{key:"level3",value:[{date:"day1",key:"level3",value:"60"},{date:"day2",key:"level3",value:"60"},{date:"day3",key:"level3",value:"60"}]}]
+function ConvertJson(){
+            var item = original[0];
+        var accept_list = [];
+        for (attr in item){
+            accept_json = {}
+            if(attr != 'date'){
+                accept_json["key"] = attr;
+                var list = [];
+                for(var i=0;i< original.length;i++){
+                    var ob = original[i];
+                    j = {};
+                    j["key"] = attr;
+                    j["date"] = ob["date"];
+                    j["value"] = ob[attr];
+                    list.push(j);
+                }
+                accept_json["value"] = list;
+                accept_list.push(accept_json);
+            }
+        }
+}
+        var original = [{level1:90,level2:80,level3:78,level4:78,level5:68,average:56,date:"day1"},
+                        {level1:80,level2:80,level3:88,level4:58,level5:88,average:76,date:"day2"},
+                        {level1:70,level2:80,level3:98,level4:98,level5:38,average:86,date:"day3"},
+                        {level1:70,level2:80,level3:78,level4:58,level5:58,average:36,date:"day4"},
+                        {level1:20,level2:60,level3:79,level4:55,level5:35,average:43,date:"day5"}]
+//        console.log(original[0]["date"])
+        var item = original[0];
+        var accept_list = [];
+        for (attr in item){
+            accept_json = {}
+            if(attr != 'date'){
+                accept_json["key"] = attr;
+                var list = [];
+                for(var i=0;i< original.length;i++){
+                    var ob = original[i];
+                    j = {};
+                    j["key"] = attr;
+                    j["date"] = ob["date"];
+                    j["value"] = ob[attr];
+                    list.push(j);
+                }
+                accept_json["value"] = list;
+                accept_list.push(accept_json);
+            }
+        }
+//        var mdata = [{key:"level1",value:[{date:"day1",key:"level1",value:"90"},{date:"day2",key:"level1",value:"80"},{date:"day3",key:"level1",value:"70"}]}
+//        ,{key:"level2",value:[{date:"day1",key:"level2",value:"70"},{date:"day2",key:"level2",value:"80"},{date:"day3",key:"level2",value:"90"}]}
+//        ,{key:"level3",value:[{date:"day1",key:"level3",value:"60"},{date:"day2",key:"level3",value:"60"},{date:"day3",key:"level3",value:"60"}]}]
+        var mdata = accept_list;
         var margin = {top:30,right:30,bottom:30,left:30};
         var chart_width = $("#diagram").width() - margin.left - margin.right;
         var chart_height = chart_width/2 - margin.top - margin.bottom;
@@ -86,14 +135,13 @@
             .enter()
             .append("g")
             .attr("class","serie")
-            .attr("transform","translate("+barWidth/2+",0)")
+            .attr("transform","translate("+x.bandwidth()/2+",0)")
 
         serie.append("path")
             .attr("class","line")
             .attr("stroke",function (d,i) {
                 return colors[i];
             })
-            .attr("stroke-width","2")
             .attr("d",function (d) {
                 return lineFunction(d.value);
             })
