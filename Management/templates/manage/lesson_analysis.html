@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>学员课程分析</title>
+    <link href="/static/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <script src="/static/jquery.min.js"></script>
+    <script src="/static/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/static/d3/d3.min.js" charset="utf-8"></script>
+    <style type="text/css">
+        text {
+          font: 10px sans-serif;
+        }
+
+        .axis path,
+        .axis line {
+          fill: none;
+          stroke: #000;
+          shape-rendering: crispEdges;
+        }
+
+        .line {
+          fill: none;
+          stroke-width: 1.5px;
+        }
+
+        .label {
+          text-anchor: middle;
+        }
+
+        .label rect {
+          fill: white;
+        }
+
+        .label-key {
+          font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-lg-12">
+                <h3 class="text-center">学员课程分析</h3>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div id = "diagram" class="col-xs-12 col-md-8 col-lg-8 col-md-offset-1 col-lg-offset-1">
+
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+
+//        var mdata = [{level1:"90",level2:"90",level3:"85",level4:"80",level5:"70", date:"day1"},
+//            {level1:"80",level2:"70",level3:"75",level4:"90",level5:"57", date:"day2"},
+//            {level1:"70",level2:"60",level3:"65",level4:"80",level5:"67", date:"day3"},
+//            {level1:"60",level2:"80",level3:"95",level4:"70",level5:"77", date:"day4"},
+//            {level1:"68",level2:"90",level3:"55",level4:"60",level5:"87", date:"day5"},
+//        ];
+//        var mdata = [{name:"Lesson1",value:90.78},
+//            {name:"Lesson2",value:83.67},
+//            {name:"Lesson3",value:67.45},
+//        ];
+        var mdata = [{key:"level1",value:[{date:"day1",key:"level1",value:"90"},{date:"day2",key:"level1",value:"80"},{date:"day3",key:"level1",value:"70"}]}
+        ,{key:"level2",value:[{date:"day1",key:"level2",value:"70"},{date:"day2",key:"level2",value:"80"},{date:"day3",key:"level2",value:"90"}]}
+        ,{key:"level3",value:[{date:"day1",key:"level3",value:"60"},{date:"day2",key:"level3",value:"60"},{date:"day3",key:"level3",value:"60"}]}]
+        var margin = {top:30,right:30,bottom:30,left:30};
+        var chart_width = $("#diagram").width() - margin.left - margin.right;
+        var chart_height = chart_width/2 - margin.top - margin.bottom;
+        var barWidth = chart_width/mdata.length;
+        var svg = d3.select("#diagram").append("svg");
+
+        var diagram = svg.attr("width",chart_width + margin.left + margin.right)
+            .attr("height", chart_height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform","translate("+margin.left+","+margin.top+")")
+
+        var x = d3.scaleBand()
+            .domain(mdata[0].value.map(function (d) {
+                return d.date
+            }))
+            .range([0,chart_width]);
+
+        var y = d3.scaleLinear()
+            .domain([0,100])
+            .range([chart_height,0]);
+
+        var lineFunction = d3.line()
+                         .x(function(d){return x(d.date);})
+                         .y(function(d){return y(d.value);});
+
+        diagram.append("g")
+            .attr("class","x axis--x")
+            .attr("transform","translate(0,"+chart_height+")")
+            .call(d3.axisBottom(x));
+
+        var serie = diagram.selectAll(".serie")
+            .data(mdata)
+            .enter()
+            .append("g")
+            .attr("class","serie")
+            .attr("transform","translate("+barWidth/2+",0)")
+//            .text(function(d){
+//                console.log(d);
+//                return d;
+//            })
+
+        serie.append("path")
+            .attr("class","line")
+            .attr("stroke","green")
+            .attr("stroke-width","2")
+            .attr("d",function (d) {
+                return lineFunction(d.value);
+            })
+
+        var label = serie.selectAll(".label")
+            .data(function(d){
+                return d.value;
+            })
+            .enter()
+            .append("g")
+            .attr("class","label")
+            .attr("transform",function(d){
+                return "translate("+x(d.date)+","+y(d.value)+")";
+            })
+
+        label.append("text")
+            .attr("dy",".35em")
+            .filter(function(d, i) { return i === mdata.length - 1; })
+            .append("tspan")
+            .attr("class", "label-key")
+            .text(function(d) { return "HH"; });
+    </script>
+</body>
+</html>

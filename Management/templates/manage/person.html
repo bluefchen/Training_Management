@@ -91,6 +91,10 @@
             number = $("#number").text();
             window.location.href = "/manage/person/edit/"+number;
         })
+        $("#delete").click(function () {
+            number = $("#number").text();
+            window.location.href = "/manage/person/delete/"+number;
+        })
     })
     function DrawChart(){
         var lessons = {{ grade|safe }}

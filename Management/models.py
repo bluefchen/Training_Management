@@ -30,7 +30,7 @@ class Grade(models.Model):
     average = models.DecimalField(max_digits=5, decimal_places=2, default=60.00)
 
 class LessonOne(models.Model):
-    number = models.CharField(max_length=32, default='135300100')
+    number = models.CharField(max_length=32, default='1700001')
     level1 = models.DecimalField(max_digits=5, decimal_places=2, default=60.00)
     level2 = models.DecimalField(max_digits=5, decimal_places=2, default=60.00)
     level3 = models.DecimalField(max_digits=5, decimal_places=2, default=60.00)

@@ -11,7 +11,7 @@ from django.conf import settings
 import time
 # 首页
 def index(request):
-    person = Person.objects.get(pk=1)
+    person = Person.objects.get(pk=1700001)
     return render(request, 'manage/index.html', {'person': person})
 
 #  得到培训人员的列表
@@ -36,6 +36,12 @@ def edit_person(request, id):
     else:
         person = Person.objects.get(number=id)
     return render(request, 'manage/person_edit.html', {'person': person})
+# 删除学员信息
+def delete_person(request, id):
+    print 'delete person'
+    person = Person.objects.get(number=id)
+    person.delete()
+    return HttpResponseRedirect('/manage/people')
 
 # 更新培训人员个人信息
 def update_person(request):
@@ -79,6 +85,13 @@ def update_person(request):
     person.save();
     return HttpResponseRedirect('/manage/person/'+str(number));
 
+# 具体课程成绩分析
+def lesson_analysis(request, id):
+    lesson1s = LessonOne.objects.filter(number=id).order_by('-train_time')[0:5]
+    # if len(lesson1s) > 5:
+    #     lesson1s = lesson1s[0:5]
+    print 'coount is ' + str(len(lesson1s))
+    return render(request, 'manage/lesson_analysis.html', {'lesson': lesson1s})
 # 培训系统上传学员培训数据
 def setLessonOneGrade(request):
     if request.POST:
