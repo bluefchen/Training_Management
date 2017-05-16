@@ -6,33 +6,59 @@
     <link href="/static/bootstrap/css/bootstrap.css" rel="stylesheet">
     <script src="/static/jquery.min.js"></script>
     <script src="/static/bootstrap/js/bootstrap.min.js"></script>
-    <script src="/static/d3/d3.min.js" charset="utf-8"></script>
+    <style>
+        .error_msg{
+            color: red;
+        }
+    </style>
 </head>
 <body>
-<h1>Hello World</h1>
-<h1>{{person.number}}</h1>
-<h1>{{person.name}}</h1>
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-md-10 col-lg-10 col-md-offset-1 col-lg-offset-1">
+                <h1 class="text-center">空乘人员培训管理系统</h1>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-xs-6 col-md-4 col-lg-4 col-md-offset-4 col-lg-offset-4">
+                 <form id="form" action="/manage/login" method="post">
+                        {%  if error.non_field_errors %}
+                        {% for item in error.non_field_errors %}
+                        <span class="error_msg">{{ item }}</span>
+                        {% endfor %}
+                        {% endif %}
+                        <div class="form-group">
+                            <label >用户名</label>
+                            <input name="username" type="text" class="form-control" placeholder="请输入您的用户名" value={{error.username.value}}>
+                            {% if error.errors.username %}
+                            <span class="error_msg">{{ error.errors.username.0 }}</span>
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            <label >密码</label>
+                            <input name="password" type="password" class="form-control" placeholder="请输入您的登录密码">
+                            <a class="pull-right" href="/manage/password">更改密码</a>
+                            {% if error.password %}
+                            <span class="error_msg">{{ error.errors.password.0 }}</span>
+                            {% endif %}
+                        </div>
+                 </form>
+            </div>
+        </div>
+       <br>
+        <div class="row">
+            <div class="col-xs-4 col-md-4 col-lg-4 col-md-offset-4 col-lg-offset-4">
+                <button id="submit" type="button" class="btn btn-primary center-block">登录</button>
+            </div>
+        </div>
+    </div>
 </body>
 <script type="text/javascript">
-    var lineData=[{"x":1,   "y":5},  {"x":20,  "y":20},
-                 {"x":40,  "y":10},{"x":60,  "y":40},
-                 {"x":80,  "y":5},  {"x":100,"y":60}];
-
-//线生成器
-var lineFunction = d3.line()
-                         .x(function(d){return d.x;})
-                         .y(function(d){return d.y;});
-
-//svg容器
-var svgContainer = d3.select("body").append("svg")
-                                    .attr("width",200)
-                                    .attr("height",200);
-
-//把path扔到容器中-- lineData和lineFunction，并给d赋属性
-var lineGraph = svgContainer.append("path")
-                            .attr("d",lineFunction(lineData))
-                            .attr("stroke","blue")
-                            .attr("stroke-width",2)
-                            .attr("fill","none");
+    $(function () {
+        $("#submit").click(function () {
+            $("#form").submit();
+        })
+    })
 </script>
 </html>

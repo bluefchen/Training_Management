@@ -40,11 +40,12 @@
 <div class="container">
     <div class="row">
         <div class="col-md-12 col-lg-12">
-            <h3 class="text-center">培训人员个人信息</h3>
+            <h3 class="text-center">学员个人信息</h3>
         </div>
     </div>
     <br>
     <div class="col-md-2 col-lg-2 col-md-offset-1 col-lg-offset-1">
+        <br>
         <img src={{person.image.url}} class="img-thumbnail" >
     </div>
     <br>
@@ -58,6 +59,12 @@
                 <td>{{person.name}}</td>
                 <td><strong>性别：</strong></td>
                 <td>{{person.gender}}</td>
+            </tr>
+            <tr>
+                <td><strong>身份证号：</strong></td>
+                <td>{{person.idcard}}</td>
+                <td><strong>籍贯：</strong></td>
+                <td>{{person.province}}</td>
             </tr>
             <tr>
                 <td><strong>年龄：</strong></td>
@@ -114,7 +121,9 @@
 //                        {level1:70,level2:80,level3:98,level4:98,level5:38,average:86,date:"day3"},
 //                        {level1:70,level2:80,level3:78,level4:58,level5:58,average:36,date:"day4"},
 //                        {level1:20,level2:60,level3:79,level4:55,level5:35,average:43,date:"day5"}]
-            d3.json("/manage/lesson/"+number,function (error,data) {
+            var lesson = $(this).attr("id");
+//            console.log(lesson);
+            d3.json("/manage/analysis/"+lesson+"/"+number,function (error,data) {
                 if(error)
                     throw error;
 //                console.log(data);
@@ -192,6 +201,9 @@
             })
             .attr("width",x.bandwidth())
             .attr("class","bar")
+            .attr("id",function (d) {
+                return d.name
+            })
 
         bar.append(("text"))
             .attr("x",barWidth*0.6/2+15)

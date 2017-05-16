@@ -13,7 +13,7 @@ class Person(models.Model):
     idcard = models.CharField(max_length=32, default='13027472347324')
     province = models.CharField(max_length=32, default='Shanghai')
     name = models.CharField(max_length=32, default='LiHua')
-    gender = models.CharField(max_length=1, default='F')
+    gender = models.CharField(max_length=2, default='F')
     age = models.CharField(max_length=3, default='25')
     phone = models.CharField(max_length=15, default='18510309110')
     email = models.CharField(max_length=32, default='bigplane@qq.com')
@@ -39,6 +39,26 @@ class LessonOne(models.Model):
     average = models.DecimalField(max_digits=5, decimal_places=2, default=60.00)
     train_time = models.DateTimeField(auto_now=True)
 
-class Avatar(models.Model):
-    number = models.CharField(max_length=32, default='1700001', primary_key=True)
-    image = models.ImageField(upload_to='avatar', blank=True, null=True)
+
+class LessonTwo(models.Model):
+    number = models.CharField(max_length=32, default='1700001')
+    level1 = models.DecimalField(max_digits=5, decimal_places=2, default=70.00)
+    level2 = models.DecimalField(max_digits=5, decimal_places=2, default=70.00)
+    level3 = models.DecimalField(max_digits=5, decimal_places=2, default=70.00)
+    average = models.DecimalField(max_digits=5, decimal_places=2, default=70.00)
+    train_time = models.DateTimeField(auto_now=True)
+
+class LessonThree(models.Model):
+    number = models.CharField(max_length=32, default='1700001')
+    level1 = models.DecimalField(max_digits=5, decimal_places=2, default=80.00)
+    level2 = models.DecimalField(max_digits=5, decimal_places=2, default=80.00)
+    level3 = models.DecimalField(max_digits=5, decimal_places=2, default=80.00)
+    level4 = models.DecimalField(max_digits=5, decimal_places=2, default=80.00)
+    level5 = models.DecimalField(max_digits=5, decimal_places=2, default=80.00)
+    level6 = models.DecimalField(max_digits=5, decimal_places=2, default=80.00)
+    average = models.DecimalField(max_digits=5, decimal_places=2, default=80.00)
+    train_time = models.DateTimeField(auto_now=True)
+
+class SuperUser(models.Model):
+    username = models.CharField(max_length=32, default='admin')
+    password = models.CharField(max_length=32,default='admin')

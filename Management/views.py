@@ -11,9 +11,10 @@ from django.conf import settings
 import time
 # 首页
 def index(request):
-    person = Person.objects.get(pk=1700001)
-    return render(request, 'manage/index.html', {'person': person})
-
+    return render(request, 'manage/index.html')
+#重置密码
+def password(request):
+    return render(request,'manage/reset_password.html')
 #  得到培训人员的列表
 def peoplelist(request):
     people = Person.objects.order_by('number')
@@ -90,14 +91,57 @@ def update_person(request):
 # var mdata = [{key:"level1",value:[{date:"day1",key:"level1",value:"90"},{date:"day2",key:"level1",value:"80"},{date:"day3",key:"level1",value:"70"}]}
 #         ,{key:"level2",value:[{date:"day1",key:"level2",value:"70"},{date:"day2",key:"level2",value:"80"},{date:"day3",key:"level2",value:"90"}]}
 #         ,{key:"level3",value:[{date:"day1",key:"level3",value:"60"},{date:"day2",key:"level3",value:"60"},{date:"day3",key:"level3",value:"60"}]}]
-def lesson_analysis(request, id):
-    lessons = LessonOne.objects.filter(number=id).order_by('train_time')[0:5]
-    list_lesson = [];
-    for lesson in lessons:
-        json_lesson = {'level1':str(lesson.level1),'level2':str(lesson.level2),'level3':str(lesson.level3),'level4':str(lesson.level4)
-                           ,'level5':str(lesson.level5),'average':str(lesson.average),'date':lesson.train_time.strftime("%Y.%m.%d %H:%M")}
-        list_lesson.append(json_lesson)
-    return HttpResponse(json.dumps(list_lesson),content_type="application/json");
+def lesson_analysis(request,lesson, id):
+    if str(lesson) =='lesson1':
+        lessons = LessonOne.objects.filter(number=id).order_by('train_time')[0:5]
+        list_lesson = [];
+        for lesson in lessons:
+            json_lesson = {'level1':str(lesson.level1),'level2':str(lesson.level2),'level3':str(lesson.level3),'level4':str(lesson.level4)
+                               ,'level5':str(lesson.level5),'average':str(lesson.average),'date':lesson.train_time.strftime("%Y.%m.%d %H:%M")}
+            list_lesson.append(json_lesson)
+        return HttpResponse(json.dumps(list_lesson),content_type="application/json")
+    elif str(lesson) == 'lesson2':
+        lessons = LessonTwo.objects.filter(number=id).order_by('train_time')[0:5]
+        list_lesson = [];
+        for lesson in lessons:
+            json_lesson = {'level1': str(lesson.level1), 'level2': str(lesson.level2), 'level3': str(lesson.level3),
+                           'average': str(lesson.average),
+                           'date': lesson.train_time.strftime("%Y.%m.%d %H:%M")}
+            list_lesson.append(json_lesson)
+        return HttpResponse(json.dumps(list_lesson), content_type="application/json")
+    elif str(lesson) == 'lesson3':
+        lessons = LessonThree.objects.filter(number=id).order_by('train_time')[0:5]
+        list_lesson = [];
+        for lesson in lessons:
+            json_lesson = {'level1': str(lesson.level1), 'level2': str(lesson.level2), 'level3': str(lesson.level3),
+                           'level4': str(lesson.level4), 'level5': str(lesson.level5)
+                        , 'level6': str(lesson.level6), 'average': str(lesson.average),
+                           'date': lesson.train_time.strftime("%Y.%m.%d %H:%M")}
+            list_lesson.append(json_lesson)
+        return HttpResponse(json.dumps(list_lesson), content_type="application/json")
+    else:
+        return HttpResponse("lesson is "+lesson+" and id is "+id)
+#登录界面处理
+def login(request):
+    loginpost = LoginForm(request.POST);
+    if loginpost.is_valid():
+        return HttpResponseRedirect('/manage/people')
+    else:
+        # print loginpost.username
+        return render(request,'manage/index.html',{'error':loginpost})
+
+def reset_password(request):
+    passwordpost = PasswordForm(request.POST)
+    if passwordpost.is_valid():
+        cleaned_data = passwordpost.clean()
+        print cleaned_data
+        user = SuperUser.objects.filter(username="admin",password=cleaned_data.get("origin"))[0]
+        user.password = cleaned_data.get("password1")
+        user.save()
+        return render(request, 'manage/reset_password.html', {'succeed': 'succeed'})
+    else:
+        # print passwordpost.clean()
+        return render(request, 'manage/reset_password.html', {'error': passwordpost})
 # 培训系统上传学员培训数据
 def setLessonOneGrade(request):
     if request.POST:

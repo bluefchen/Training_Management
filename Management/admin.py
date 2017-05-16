@@ -22,3 +22,18 @@ class LessonOneAdmin(admin.ModelAdmin):
     list_display = ('number', 'level1', 'level2','level3', 'level4', 'level5', 'train_time')
 
 admin.site.register(LessonOne, LessonOneAdmin)
+
+class LessonTwoAdmin(admin.ModelAdmin):
+    list_display = ('number', 'level1', 'level2','level3', 'train_time')
+
+admin.site.register(LessonTwo, LessonTwoAdmin)
+
+class LessonThreeAdmin(admin.ModelAdmin):
+    list_display = ('number', 'level1', 'level2','level3', 'level4', 'level5','level6','train_time')
+
+admin.site.register(LessonThree, LessonThreeAdmin)
+
+class SuperUserAdmin(admin.ModelAdmin):
+    list_display = ('username', 'password')
+
+admin.site.register(SuperUser, SuperUserAdmin)
