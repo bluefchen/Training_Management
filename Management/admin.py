@@ -19,17 +19,17 @@ class GradeAdmin(admin.ModelAdmin):
 admin.site.register(Grade, GradeAdmin)
 
 class LessonOneAdmin(admin.ModelAdmin):
-    list_display = ('number', 'level1', 'level2','level3', 'level4', 'level5', 'train_time')
+    list_display = ('number', 'level1', 'level2','level3', 'level4', 'level5', 'average', 'train_time')
 
 admin.site.register(LessonOne, LessonOneAdmin)
 
 class LessonTwoAdmin(admin.ModelAdmin):
-    list_display = ('number', 'level1', 'level2','level3', 'train_time')
+    list_display = ('number', 'level1', 'level2','level3', 'average', 'train_time')
 
 admin.site.register(LessonTwo, LessonTwoAdmin)
 
 class LessonThreeAdmin(admin.ModelAdmin):
-    list_display = ('number', 'level1', 'level2','level3', 'level4', 'level5','level6','train_time')
+    list_display = ('number', 'level1', 'level2','level3', 'level4', 'level5','level6', 'average', 'train_time')
 
 admin.site.register(LessonThree, LessonThreeAdmin)
 

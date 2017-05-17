@@ -7,49 +7,65 @@
     <script src="/static/jquery.min.js"></script>
     <script src="/static/bootstrap/js/bootstrap.min.js"></script>
     <style>
+        html,body{
+            width:100%;
+            height:100%;
+        }
         .error_msg{
             color: red;
+        }
+        body{
+            background-size: cover;
+            background-image: url(/static/pictures/plane_index.jpg);
+            background-repeat: no-repeat;
+        }
+        .container{
+            height:100%;
+            display: table;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="row">
-            <div class="col-xs-12 col-md-10 col-lg-10 col-md-offset-1 col-lg-offset-1">
-                <h1 class="text-center">空乘人员培训管理系统</h1>
+        <div class="row" style="vertical-align:middle; display: table-cell">
+            <div class="row">
+                <div class="col-xs-12 col-md-10 col-lg-10 col-md-offset-1 col-lg-offset-1">
+                    <h1 class="text-center" style="color: white"><strong>空乘人员培训管理系统<strong></h1>
+                </div>
             </div>
-        </div>
-        <br>
-        <div class="row">
-            <div class="col-xs-6 col-md-4 col-lg-4 col-md-offset-4 col-lg-offset-4">
-                 <form id="form" action="/manage/login" method="post">
-                        {%  if error.non_field_errors %}
-                        {% for item in error.non_field_errors %}
-                        <span class="error_msg">{{ item }}</span>
-                        {% endfor %}
-                        {% endif %}
-                        <div class="form-group">
-                            <label >用户名</label>
-                            <input name="username" type="text" class="form-control" placeholder="请输入您的用户名" value={{error.username.value}}>
-                            {% if error.errors.username %}
-                            <span class="error_msg">{{ error.errors.username.0 }}</span>
+            <br>
+            <br>
+            <div class="row">
+                <div class="col-xs-6 col-md-4 col-lg-4 col-md-offset-4 col-lg-offset-4">
+                     <form id="form" action="/manage/login" method="post">
+                            {%  if error.non_field_errors %}
+                            {% for item in error.non_field_errors %}
+                            <span class="error_msg">{{ item }}</span>
+                            {% endfor %}
                             {% endif %}
-                        </div>
-                        <div class="form-group">
-                            <label >密码</label>
-                            <input name="password" type="password" class="form-control" placeholder="请输入您的登录密码">
-                            <a class="pull-right" href="/manage/password">更改密码</a>
-                            {% if error.password %}
-                            <span class="error_msg">{{ error.errors.password.0 }}</span>
-                            {% endif %}
-                        </div>
-                 </form>
+                            <div class="form-group">
+                                <label >用户名</label>
+                                <input name="username" type="text" class="form-control" placeholder="请输入您的用户名" value={{error.username.value}}>
+                                {% if error.errors.username %}
+                                <span class="error_msg">{{ error.errors.username.0 }}</span>
+                                {% endif %}
+                            </div>
+                            <div class="form-group">
+                                <label >密码</label>
+                                <input name="password" type="password" class="form-control" placeholder="请输入您的登录密码">
+                                <a class="pull-right" href="/manage/password" style="color: brown"><u>更改密码</u></a>
+                                {% if error.password %}
+                                <span class="error_msg">{{ error.errors.password.0 }}</span>
+                                {% endif %}
+                            </div>
+                     </form>
+                </div>
             </div>
-        </div>
-       <br>
-        <div class="row">
-            <div class="col-xs-4 col-md-4 col-lg-4 col-md-offset-4 col-lg-offset-4">
-                <button id="submit" type="button" class="btn btn-primary center-block">登录</button>
+           <br>
+            <div class="row">
+                <div class="col-xs-12 col-md-12 col-lg-12">
+                    <button id="submit" type="button" class="btn btn-primary center-block">登录</button>
+                </div>
             </div>
         </div>
     </div>

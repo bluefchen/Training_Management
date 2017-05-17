@@ -143,29 +143,79 @@ def reset_password(request):
         # print passwordpost.clean()
         return render(request, 'manage/reset_password.html', {'error': passwordpost})
 # 培训系统上传学员培训数据
-def setLessonOneGrade(request):
+def setLessonOneGrade(request,lesson):
     if request.POST:
-        receive_data = request.POST
-        s_number = request.POST['number']
-        s_level1 = float(request.POST['level1'])
-        s_level2 = float(request.POST['level2'])
-        s_level3 = float(request.POST['level3'])
-        s_level4 = float(request.POST['level4'])
-        s_level5 = float(request.POST['level5'])
-        # compute the average for lesson1
-        s_average = str((s_level1 + s_level2 + s_level3 + s_level4 + s_level5)/5)
-        person = Person.objects.get(number=s_number)
-        # update grade table lesson one date and average evaluate
-        grade = person.person_grade
-        s_lesson_average = (float(grade.average) * 3 - float(grade.lesson1) + float(s_average))/3
-        grade.lesson1 = s_average
-        grade.average = s_lesson_average
-        grade.save()
-        # add a new recored for lesson1
-        lesson1 = LessonOne(number=s_number, level1=str(s_level1), level2=str(s_level2), level3=str(s_level3),
-                            level4=str(s_level4), level5=s_level5)
-        lesson1.save()
-        return HttpResponse('1')
+        if lesson == 'lesson1':
+            receive_data = request.POST
+            s_number = request.POST['number']
+            s_level1 = round(float(receive_data['level1']),2)
+            s_level2 = round(float(receive_data['level2']),2)
+            s_level3 = round(float(receive_data['level3']),2)
+            s_level4 = round(float(receive_data['level4']),2)
+            s_level5 = round(float(receive_data['level5']),2)
+            # compute the average for lesson1
+            s_average = round((s_level1 + s_level2 + s_level3 + s_level4 + s_level5)/5,2)
+            person = Person.objects.get(number=s_number)
+            # update grade table lesson one date and average evaluate
+            grade = person.person_grade
+            s_lesson_average = round((float(grade.average) * 3 - float(grade.lesson1) + s_average)/3,2)
+            grade.lesson1 = s_average
+            grade.average = s_lesson_average
+            grade.save()
+            # add a new recored for lesson1
+            lesson1 = LessonOne(number=s_number, level1=s_level1, level2=s_level2, level3=s_level3,
+                                level4=s_level4, level5=s_level5, average=s_average)
+            lesson1.save()
+            return HttpResponse('1')
+        elif lesson == 'lesson2':
+            receive_data = request.POST
+            s_number = request.POST['number']
+            s_level1 = round(float(receive_data['level1']),2)
+            s_level2 = round(float(receive_data['level2']),2)
+            s_level3 = round(float(receive_data['level3']),2)
+            # compute the average for lesson1
+            s_average = round((s_level1 + s_level2 + s_level3)/3,2)
+            person = Person.objects.get(number=s_number)
+            # update grade table lesson one date and average evaluate
+            grade = person.person_grade
+            s_lesson_average = round((float(grade.average) * 3 - float(grade.lesson2) + s_average)/3,2)
+            grade.lesson2 = s_average
+            grade.average = s_lesson_average
+            grade.save()
+            # add a new recored for lesson1
+            lesson2 = LessonTwo(number=s_number, level1=s_level1, level2=s_level2, level3=s_level3, average=s_average)
+            lesson2.save()
+            return HttpResponse('1')
+        elif lesson == 'lesson3':
+            receive_data = request.POST
+            s_number = request.POST['number']
+            s_level1 = round(float(receive_data['level1']),2)
+            s_level2 = round(float(receive_data['level2']),2)
+            s_level3 = round(float(receive_data['level3']),2)
+            s_level4 = round(float(receive_data['level4']),2)
+            s_level5 = round(float(receive_data['level5']),2)
+            s_level6 = round(float(receive_data['level6']),2)
+            # compute the average for lesson1
+            s_average = round((s_level1 + s_level2 + s_level3 + s_level4 + s_level5 + s_level6)/6,2)
+            person = Person.objects.get(number=s_number)
+            # update grade table lesson one date and average evaluate
+            grade = person.person_grade
+            s_lesson_average = round((float(grade.average) * 3 - float(grade.lesson3) + s_average)/3,2)
+            grade.lesson3 = s_average
+            grade.average = s_lesson_average
+            grade.save()
+            # add a new recored for lesson1
+            lesson3 = LessonThree(number=s_number, level1=s_level1, level2=s_level2, level3=s_level3,
+                                  level4=s_level4, level5=s_level5, level6=s_level6, average=s_average)
+            lesson3.save()
+            return HttpResponse('1')
     else:
         return HttpResponse('0')
 
+def checkuser(request):
+    number = request.POST['number']
+    count = Person.objects.filter(number=number).count();
+    if count == 1:
+        return HttpResponse('1')
+    else:
+        return HttpResponse('0')

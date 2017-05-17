@@ -6,6 +6,7 @@ from django.conf.urls.static import static
 urlpatterns = [
     url(r'^$', views.index),
     url(r'^login$', views.login),
+    url(r'^checkuser$', views.checkuser),
     url(r'^password$', views.password),
     url(r'^reset/password$', views.reset_password),
     url(r'^people$', views.peoplelist),
@@ -14,4 +15,5 @@ urlpatterns = [
     url(r'^person/update$', views.update_person),
     url(r'^person/delete/(?P<id>[0-9]+)$', views.delete_person),
     url(r'^analysis/(?P<lesson>[a-z]+[0-9]+)/(?P<id>[0-9]+)$', views.lesson_analysis),
+    url(r'^setdata/(?P<lesson>[a-z]+[0-9]+)$', views.setLessonOneGrade),
 ]

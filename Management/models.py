@@ -42,21 +42,21 @@ class LessonOne(models.Model):
 
 class LessonTwo(models.Model):
     number = models.CharField(max_length=32, default='1700001')
-    level1 = models.DecimalField(max_digits=5, decimal_places=2, default=70.00)
-    level2 = models.DecimalField(max_digits=5, decimal_places=2, default=70.00)
-    level3 = models.DecimalField(max_digits=5, decimal_places=2, default=70.00)
-    average = models.DecimalField(max_digits=5, decimal_places=2, default=70.00)
+    level1 = models.DecimalField(max_digits=5, decimal_places=2, default=60.00)
+    level2 = models.DecimalField(max_digits=5, decimal_places=2, default=60.00)
+    level3 = models.DecimalField(max_digits=5, decimal_places=2, default=60.00)
+    average = models.DecimalField(max_digits=5, decimal_places=2, default=60.00)
     train_time = models.DateTimeField(auto_now=True)
 
 class LessonThree(models.Model):
     number = models.CharField(max_length=32, default='1700001')
-    level1 = models.DecimalField(max_digits=5, decimal_places=2, default=80.00)
-    level2 = models.DecimalField(max_digits=5, decimal_places=2, default=80.00)
-    level3 = models.DecimalField(max_digits=5, decimal_places=2, default=80.00)
-    level4 = models.DecimalField(max_digits=5, decimal_places=2, default=80.00)
-    level5 = models.DecimalField(max_digits=5, decimal_places=2, default=80.00)
-    level6 = models.DecimalField(max_digits=5, decimal_places=2, default=80.00)
-    average = models.DecimalField(max_digits=5, decimal_places=2, default=80.00)
+    level1 = models.DecimalField(max_digits=5, decimal_places=2, default=60.00)
+    level2 = models.DecimalField(max_digits=5, decimal_places=2, default=60.00)
+    level3 = models.DecimalField(max_digits=5, decimal_places=2, default=60.00)
+    level4 = models.DecimalField(max_digits=5, decimal_places=2, default=60.00)
+    level5 = models.DecimalField(max_digits=5, decimal_places=2, default=60.00)
+    level6 = models.DecimalField(max_digits=5, decimal_places=2, default=60.00)
+    average = models.DecimalField(max_digits=5, decimal_places=2, default=60.00)
     train_time = models.DateTimeField(auto_now=True)
 
 class SuperUser(models.Model):

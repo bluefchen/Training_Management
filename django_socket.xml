@@ -2,6 +2,7 @@
     <socket>:8001</socket>
     <chdir>/pythonweb/PlanTraning</chdir>
     <module>django_wsgi</module>
+    <py-autoreload>1</py-autoreload>
     <processes>4</processes> <!-- 进程数 -->
     <daemonize>uwsgi.log</daemonize>
 </uwsgi>
