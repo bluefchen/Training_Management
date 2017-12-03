@@ -19,3 +19,6 @@ unzip them and add the folder in system environment
 
 # run
 python manage.py runserver
+
+# manage page
+http://127.0.0.1:8000/manage/
